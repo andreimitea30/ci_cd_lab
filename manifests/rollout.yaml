@@ -9,8 +9,13 @@ spec:
   strategy:
     canary:
       steps:
-        - setWeight: 50
-        - pause: { duration: 60s }
+        # Pasul 1: 25% din trafic către versiunea nouă
+        - setWeight: 25
+        - pause: { duration: 120s }
+        # Pasul 2: 75% din trafic către versiunea nouă
+        - setWeight: 75
+        - pause: { duration: 120s }
+        # Pasul 3: 100% din trafic către versiunea nouă
         - setWeight: 100
   selector:
     matchLabels:
@@ -22,8 +27,8 @@ spec:
     spec:
       containers:
         - name: webserver
+          # Asigură-te că folosești username-ul tău corect și tag-ul :latest
           image: ghcr.io/andreimitea30/ci_cd_lab:latest
           ports:
             - containerPort: 8080
           imagePullPolicy: Always
-
